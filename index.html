@@ -13,8 +13,60 @@ html{scroll-behavior:smooth}
 body{background:var(--obsidian);color:var(--smoke);font-family:'DM Sans',sans-serif;overflow-x:hidden}
 body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");opacity:.03;pointer-events:none;z-index:9999}
 
+
+/* HERO TAGLINE ANIMATION */
+.hero-tagline-wrap {
+  margin-top: -0.5rem;
+  margin-bottom: 1.8rem;
+  overflow: hidden;
+}
+.hero-tagline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+}
+.tagline-word {
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(.78rem, 1.5vw, .95rem);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(232,232,232,.55);
+  opacity: 0;
+  transform: translateY(20px);
+  animation: wordReveal .5s ease forwards;
+}
+.tagline-word.highlight {
+  color: var(--gold);
+  font-weight: 600;
+  text-shadow: 0 0 12px rgba(201,168,76,.4);
+}
+.tagline-word:nth-child(1)  { animation-delay: 0.8s; }
+.tagline-word:nth-child(2)  { animation-delay: 0.9s; }
+.tagline-word:nth-child(3)  { animation-delay: 1.0s; }
+.tagline-word:nth-child(4)  { animation-delay: 1.1s; }
+.tagline-word:nth-child(5)  { animation-delay: 1.2s; }
+.tagline-word:nth-child(6)  { animation-delay: 1.3s; }
+.tagline-word:nth-child(7)  { animation-delay: 1.4s; }
+.tagline-word:nth-child(8)  { animation-delay: 1.5s; }
+.tagline-word:nth-child(9)  { animation-delay: 1.6s; }
+.tagline-word:nth-child(10) { animation-delay: 1.7s; }
+.tagline-word:nth-child(11) { animation-delay: 1.8s; }
+.tagline-word:nth-child(12) { animation-delay: 1.9s; }
+@keyframes wordReveal {
+  to { opacity: 1; transform: translateY(0); }
+}
+.tagline-line {
+  height: 1px;
+  background: linear-gradient(to right, var(--blood), var(--gold), transparent);
+  width: 0;
+  margin-top: .6rem;
+  animation: lineGrow 1s 2s ease forwards;
+}
+@keyframes lineGrow { to { width: 100%; } }
+
 /* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 4rem;background:linear-gradient(to bottom,rgba(13,13,13,.95),transparent);backdrop-filter:blur(2px);transition:background .3s}
+nav{position:fixed;top:0;left:0;right:0;z-index:10000;display:flex;align-items:center;justify-content:space-between;padding:1rem 4rem;background:linear-gradient(to bottom,rgba(13,13,13,.95),transparent);backdrop-filter:blur(2px);transition:background .3s;isolation:isolate}
 nav.scrolled{background:rgba(13,13,13,.97);box-shadow:0 1px 0 rgba(201,168,76,.1)}
 .nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
 .nav-logo-img{width:36px;height:36px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(201,168,76,.35))}
@@ -225,7 +277,7 @@ footer{background:#080808;padding:2.5rem 4rem;border-top:1px solid rgba(201,168,
     <li><a href="#proses">Proses</a></li>
     <li><a href="#testimoni">Review</a></li>
   </ul>
-  <a href="#" class="wa-link" class="nav-cta wa-link" target="_blank">Order Sekarang</a>
+  <a href="#" class="nav-cta wa-link" target="_blank">Order Sekarang</a>
   <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()">
     <span></span><span></span><span></span>
   </button>
@@ -257,10 +309,26 @@ footer{background:#080808;padding:2.5rem 4rem;border-top:1px solid rgba(201,168,
       <span class="l3">TO LIFE</span>
     </h1>
     <p class="hero-sub">Custom painting figure, resin casting &amp; 3D print untuk kolektor sejati. Setiap detail dikerjakan dengan presisi &amp; passion.</p>
-    <p style="font-family:'Oswald',sans-serif;font-size:.85rem;letter-spacing:.12em;color:var(--gold);font-style:italic;margin-top:-.8rem;margin-bottom:1.5rem;opacity:.85">✦ It's not just a toys and merch, it is your idea masterpiece ✦</p>
+    <div class="hero-tagline-wrap">
+      <div class="hero-tagline" id="heroTagline">
+        <span class="tagline-word">It's</span>
+        <span class="tagline-word">not</span>
+        <span class="tagline-word">just</span>
+        <span class="tagline-word">a</span>
+        <span class="tagline-word highlight">toys</span>
+        <span class="tagline-word">and</span>
+        <span class="tagline-word highlight">merch,</span>
+        <span class="tagline-word">it</span>
+        <span class="tagline-word">is</span>
+        <span class="tagline-word">your</span>
+        <span class="tagline-word highlight">idea</span>
+        <span class="tagline-word highlight">masterpiece</span>
+      </div>
+      <div class="tagline-line"></div>
+    </div>
     <div class="hero-btns">
       <a href="#portofolio" class="btn-primary">⚡ Lihat Portofolio</a>
-      <a href="#" class="wa-link" class="btn-secondary" target="_blank">💬 Order Sekarang</a>
+      <a href="#" class="btn-secondary wa-link" target="_blank">💬 Order Sekarang</a>
     </div>
   </div>
   <div class="hero-scroll"><div class="scroll-line"></div><span>Scroll</span></div>
@@ -344,7 +412,7 @@ footer{background:#080808;padding:2.5rem 4rem;border-top:1px solid rgba(201,168,
     <h2 class="order-title">SIAP BIKIN<br><span style="color:var(--blood)">YANG EPIC?</span></h2>
     <p class="order-sub">Ceritakan idemu — karakter favoritmu, referensi pose, warna, dan budget. Kami siap wujudkan.</p>
     <div class="turnaround"><span class="turnaround-text">⏱ Turnaround: 7–21 Hari Kerja</span></div><br>
-    <a href="#" class="wa-link" class="btn-wa wa-link" target="_blank"><span>💬</span><span>Konsultasikan Proyekmu</span></a>
+    <a href="#" class="btn-wa wa-link" target="_blank"><span>💬</span><span>Konsultasikan Proyekmu</span></a>
   </div>
 </section>
 
@@ -362,7 +430,7 @@ footer{background:#080808;padding:2.5rem 4rem;border-top:1px solid rgba(201,168,
     <div class="footer-socials">
       <a href="#" class="social-link ig-link" title="Instagram" href="#">📸</a>
       <a href="#" class="social-link tt-link" title="TikTok" href="#">🎵</a>
-      <a href="#" class="wa-link" class="social-link wa-link" title="WhatsApp" href="#" target="_blank">💬</a>
+      <a href="#" class="social-link wa-link" title="WhatsApp" href="#" target="_blank">💬</a>
       <a href="#" class="social-link yt-link" title="YouTube" href="#">▶️</a>
     </div>
     <nav class="footer-nav">
@@ -479,7 +547,7 @@ loadSettings();
 async function loadSettings() {
   try {
     const { data, error } = await SB_CLIENT.from('settings').select('*');
-    if (error) throw error;
+    if (error) { console.log('Settings DB error:', error.message); return; }
     const map = {};
     (data || []).forEach(r => map[r.key] = r.value);
 
@@ -504,7 +572,7 @@ async function loadSettings() {
     if (map.alamat) {
       document.querySelectorAll('.alamat-text').forEach(el => { el.textContent = '📍 ' + map.alamat; el.style.display = ''; });
     }
-  } catch(e) { console.log('Settings error:', e.message); }
+  } catch(e) { console.log('Settings error:', typeof e === 'object' ? (e.message || JSON.stringify(e)) : e); }
 }
 </script>
 </body>
