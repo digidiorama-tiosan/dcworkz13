@@ -506,11 +506,31 @@ async function uploadAll() {
     try {
       const ext = file.name.split('.').pop();
       const fileName = Date.now() + '_' + Math.random().toString(36).slice(2) + '_' + Math.random().toString(36).slice(2) + '.' + ext;
-      const { error: upErr } = await sb.storage.from(SB_BUCKET).upload(fileName, file, { cacheControl: '3600', upsert: true });
-      if (upErr) throw upErr;
+      
+      // Step 1: Upload to storage
+      const { data: storageData, error: upErr } = await sb.storage.from(SB_BUCKET).upload(fileName, file, { cacheControl: '3600', upsert: true });
+      if (upErr) {
+        progEl.style.width = '100%';
+        progEl.style.background = 'var(--red)';
+        statusEl.textContent = '❌ Storage: ' + upErr.message;
+        statusEl.className = 'batch-status error';
+        failed++;
+        continue;
+      }
+      
+      // Step 2: Get public URL
       const { data: urlData } = sb.storage.from(SB_BUCKET).getPublicUrl(fileName);
-      const { error: dbErr } = await sb.from('gallery').insert([{ nama, kategori, deskripsi: desc, img_url: urlData.publicUrl }]);
-      if (dbErr) throw dbErr;
+      
+      // Step 3: Insert to DB
+      const { data: insertData, error: dbErr } = await sb.from('gallery').insert([{ nama, kategori, deskripsi: desc, img_url: urlData.publicUrl }]);
+      if (dbErr) {
+        progEl.style.width = '100%';
+        progEl.style.background = 'orange';
+        statusEl.textContent = '❌ DB: ' + dbErr.message + ' | code:' + dbErr.code;
+        statusEl.className = 'batch-status error';
+        failed++;
+        continue;
+      }
 
       progEl.style.width = '100%';
       statusEl.textContent = '✅ Berhasil';
@@ -519,7 +539,7 @@ async function uploadAll() {
     } catch(e) {
       progEl.style.width = '100%';
       progEl.style.background = 'var(--red)';
-      statusEl.textContent = '❌ Gagal: ' + e.message.slice(0, 30);
+      statusEl.textContent = '❌ ' + (e.message || JSON.stringify(e));
       statusEl.className = 'batch-status error';
       failed++;
     }
