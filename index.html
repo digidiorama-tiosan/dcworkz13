@@ -225,7 +225,7 @@ footer{background:#080808;padding:2.5rem 4rem;border-top:1px solid rgba(201,168,
     <li><a href="#proses">Proses</a></li>
     <li><a href="#testimoni">Review</a></li>
   </ul>
-  <a href="https://wa.me/6285XXXXXXX" class="nav-cta" target="_blank">Order Sekarang</a>
+  <a href="#" class="wa-link" class="nav-cta wa-link" target="_blank">Order Sekarang</a>
   <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()">
     <span></span><span></span><span></span>
   </button>
@@ -238,7 +238,7 @@ footer{background:#080808;padding:2.5rem 4rem;border-top:1px solid rgba(201,168,
   <a href="#portofolio" onclick="toggleMenu()">Portofolio</a>
   <a href="#proses" onclick="toggleMenu()">Proses</a>
   <a href="#testimoni" onclick="toggleMenu()">Testimoni</a>
-  <a href="https://wa.me/6285XXXXXXX" target="_blank" style="color:var(--gold)">Order Sekarang</a>
+  <a href="#" class="wa-link" target="_blank" style="color:var(--gold)">Order Sekarang</a>
 </div>
 
 <!-- HERO -->
@@ -249,7 +249,7 @@ footer{background:#080808;padding:2.5rem 4rem;border-top:1px solid rgba(201,168,
   <div class="hero-content">
     <div class="hero-logo-wrap">
       <img class="hero-logo-big" id="hero-logo-img" src="" alt="DCWORKZ13">
-      <div class="hero-badge">✦ Arts &amp; Toys Vigilante ✦</div>
+      <div class="hero-badge"><span class="tagline-text">✦ Arts &amp; Toys Vigilante ✦</span></div>
     </div>
     <h1 class="hero-title">
       <span class="l1">BRING YOUR</span>
@@ -259,7 +259,7 @@ footer{background:#080808;padding:2.5rem 4rem;border-top:1px solid rgba(201,168,
     <p class="hero-sub">Custom painting figure, resin casting &amp; 3D print untuk kolektor sejati. Setiap detail dikerjakan dengan presisi &amp; passion.</p>
     <div class="hero-btns">
       <a href="#portofolio" class="btn-primary">⚡ Lihat Portofolio</a>
-      <a href="https://wa.me/6285XXXXXXX" class="btn-secondary" target="_blank">💬 Order Sekarang</a>
+      <a href="#" class="wa-link" class="btn-secondary" target="_blank">💬 Order Sekarang</a>
     </div>
   </div>
   <div class="hero-scroll"><div class="scroll-line"></div><span>Scroll</span></div>
@@ -341,8 +341,8 @@ footer{background:#080808;padding:2.5rem 4rem;border-top:1px solid rgba(201,168,
     <div class="section-label" style="justify-content:center;margin-bottom:1.2rem">Mulai Proyek Kamu</div>
     <h2 class="order-title">SIAP BIKIN<br><span style="color:var(--blood)">YANG EPIC?</span></h2>
     <p class="order-sub">Ceritakan idemu — karakter favoritmu, referensi pose, warna, dan budget. Kami siap wujudkan.</p>
-    <div class="turnaround">⏱ Turnaround: 7–21 Hari Kerja</div><br>
-    <a href="https://wa.me/6285XXXXXXX?text=Halo,%20saya%20mau%20konsultasi%20order%20custom%20figure" class="btn-wa" target="_blank"><span>💬</span><span>Konsultasikan Proyekmu</span></a>
+    <div class="turnaround"><span class="turnaround-text">⏱ Turnaround: 7–21 Hari Kerja</span></div><br>
+    <a href="#" class="wa-link" class="btn-wa wa-link" target="_blank"><span>💬</span><span>Konsultasikan Proyekmu</span></a>
   </div>
 </section>
 
@@ -355,12 +355,13 @@ footer{background:#080808;padding:2.5rem 4rem;border-top:1px solid rgba(201,168,
         <div class="footer-logo-text">DCWORKZ<span>13</span></div>
       </div>
       <div class="footer-tagline">Arts &amp; Toys Vigilante · Indonesia</div>
+    <div class="alamat-text" style="font-size:.72rem;color:var(--smoke-dim);margin-top:.3rem;display:none"></div>
     </div>
     <div class="footer-socials">
-      <a href="#" class="social-link" title="Instagram">📸</a>
-      <a href="#" class="social-link" title="TikTok">🎵</a>
-      <a href="https://wa.me/6285XXXXXXX" class="social-link" title="WhatsApp" target="_blank">💬</a>
-      <a href="#" class="social-link" title="YouTube">▶️</a>
+      <a href="#" class="social-link ig-link" title="Instagram" href="#">📸</a>
+      <a href="#" class="social-link tt-link" title="TikTok" href="#">🎵</a>
+      <a href="#" class="wa-link" class="social-link wa-link" title="WhatsApp" href="#" target="_blank">💬</a>
+      <a href="#" class="social-link yt-link" title="YouTube" href="#">▶️</a>
     </div>
     <nav class="footer-nav">
       <a href="#layanan">Layanan</a>
@@ -470,6 +471,39 @@ function filterPortfolio(btn) {
 
 // Load on start
 loadPortfolio();
+loadSettings();
+
+// ── SETTINGS dari Supabase
+async function loadSettings() {
+  try {
+    const { data, error } = await SB_CLIENT.from('settings').select('*');
+    if (error) throw error;
+    const map = {};
+    (data || []).forEach(r => map[r.key] = r.value);
+
+    // WhatsApp
+    const wa = map.whatsapp ? map.whatsapp.replace(/[^0-9]/g, '') : '';
+    const waMsg = encodeURIComponent('Halo, saya mau konsultasi order custom figure');
+    const waUrl = wa ? 'https://wa.me/' + wa + '?text=' + waMsg : '#';
+    document.querySelectorAll('.wa-link').forEach(el => el.href = waUrl);
+
+    // Sosmed
+    if (map.instagram) document.querySelectorAll('.ig-link').forEach(el => el.href = 'https://instagram.com/' + map.instagram);
+    if (map.tiktok) document.querySelectorAll('.tt-link').forEach(el => el.href = 'https://tiktok.com/@' + map.tiktok);
+    if (map.youtube) document.querySelectorAll('.yt-link').forEach(el => el.href = 'https://youtube.com/' + map.youtube);
+
+    // Turnaround
+    if (map.turnaround) document.querySelectorAll('.turnaround-text').forEach(el => el.textContent = '⏱ Turnaround: ' + map.turnaround);
+
+    // Tagline
+    if (map.tagline) document.querySelectorAll('.tagline-text').forEach(el => el.textContent = '✦ ' + map.tagline + ' ✦');
+
+    // Alamat di footer
+    if (map.alamat) {
+      document.querySelectorAll('.alamat-text').forEach(el => { el.textContent = '📍 ' + map.alamat; el.style.display = ''; });
+    }
+  } catch(e) { console.log('Settings error:', e.message); }
+}
 </script>
 </body>
 </html>
