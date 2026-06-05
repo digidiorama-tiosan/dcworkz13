@@ -176,6 +176,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
     <img class="login-logo-img" id="login-logo" src="" alt="DCWORKZ13">
     <div class="login-title">DCWORKZ13</div>
     <div class="login-sub">Arts &amp; Toys Vigilante · Admin Panel</div>
+    <div style="font-family:'DM Sans',sans-serif;font-size:.68rem;color:rgba(201,168,76,.5);text-align:center;font-style:italic;margin-bottom:1rem;padding:0 .5rem">It's not just a toys and merch, it is your idea masterpiece</div>
     <label class="form-label">Password</label>
     <input class="form-input" type="password" id="pwd-input" placeholder="Masukkan password...">
     <button class="btn-red" onclick="doLogin()">🔐 Masuk</button>
@@ -226,6 +227,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
           <option value="3D Print">🖨️ 3D Print</option>
           <option value="Custom Resin">💎 Custom Resin</option>
           <option value="Toys Hobby">🧸 Toys Hobby</option>
+          <option value="Apparel">👕 Apparel</option>
         </select>
 
         <label class="form-label">Deskripsi (opsional, semua foto)</label>
@@ -281,6 +283,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
         <button class="filter-chip" data-filter="Custom Toys" onclick="setFilter(this)">Custom</button>
         <button class="filter-chip" data-filter="3D Print" onclick="setFilter(this)">3D Print</button>
         <button class="filter-chip" data-filter="Custom Resin" onclick="setFilter(this)">Resin</button>
+        <button class="filter-chip" data-filter="Apparel" onclick="setFilter(this)">Apparel</button>
       </div>
     </div>
     <div class="gallery-grid" id="galleryGrid"></div>
@@ -343,6 +346,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       <option value="3D Print">🖨️ 3D Print</option>
       <option value="Custom Resin">💎 Custom Resin</option>
       <option value="Toys Hobby">🧸 Toys Hobby</option>
+      <option value="Apparel">👕 Apparel</option>
     </select>
     <label class="form-label">Deskripsi</label>
     <input class="form-input" type="text" id="edit-desc">
