@@ -505,8 +505,8 @@ async function uploadAll() {
 
     try {
       const ext = file.name.split('.').pop();
-      const fileName = Date.now() + '_' + Math.random().toString(36).slice(2) + '.' + ext;
-      const { error: upErr } = await sb.storage.from(SB_BUCKET).upload(fileName, file, { cacheControl: '3600', upsert: false });
+      const fileName = Date.now() + '_' + Math.random().toString(36).slice(2) + '_' + Math.random().toString(36).slice(2) + '.' + ext;
+      const { error: upErr } = await sb.storage.from(SB_BUCKET).upload(fileName, file, { cacheControl: '3600', upsert: true });
       if (upErr) throw upErr;
       const { data: urlData } = sb.storage.from(SB_BUCKET).getPublicUrl(fileName);
       const { error: dbErr } = await sb.from('gallery').insert([{ nama, kategori, deskripsi: desc, img_url: urlData.publicUrl }]);
