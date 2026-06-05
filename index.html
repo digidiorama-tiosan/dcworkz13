@@ -66,15 +66,15 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 @keyframes lineGrow { to { width: 100%; } }
 
 /* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:10000;display:flex;align-items:center;justify-content:space-between;padding:1rem 4rem;background:linear-gradient(to bottom,rgba(13,13,13,.95),transparent);backdrop-filter:blur(2px);transition:background .3s;isolation:isolate}
-nav.scrolled{background:rgba(13,13,13,.97);box-shadow:0 1px 0 rgba(201,168,76,.1)}
-.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
-.nav-logo-img{width:36px;height:36px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(201,168,76,.35))}
-.nav-logo-text{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.12em;color:var(--gold);text-shadow:0 0 20px rgba(201,168,76,.3)}
-.nav-logo-text span{color:var(--smoke)}
-.nav-links{display:flex;gap:2rem;list-style:none}
-.nav-links a{font-family:'Oswald',sans-serif;font-size:.82rem;letter-spacing:.15em;text-transform:uppercase;color:var(--smoke-dim);text-decoration:none;transition:color .3s}
-.nav-links a:hover{color:var(--gold)}
+#mainNav{position:fixed;top:0;left:0;right:0;z-index:10000;display:flex;align-items:center;justify-content:space-between;padding:1rem 4rem;background:linear-gradient(to bottom,rgba(13,13,13,.95),transparent);backdrop-filter:blur(2px);transition:background .3s;isolation:isolate}
+#mainNav.scrolled{background:rgba(13,13,13,.97);box-shadow:0 1px 0 rgba(201,168,76,.1)}
+#mainNav .nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+#mainNav .nav-logo-img{width:36px;height:36px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(201,168,76,.35))}
+#mainNav .nav-logo-text{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.12em;color:var(--gold);text-shadow:0 0 20px rgba(201,168,76,.3)}
+#mainNav .nav-logo-text span{color:var(--smoke)}
+#mainNav .nav-links{display:flex;gap:2rem;list-style:none}
+#mainNav .nav-links a{font-family:'Oswald',sans-serif;font-size:.82rem;letter-spacing:.15em;text-transform:uppercase;color:var(--smoke-dim);text-decoration:none;transition:color .3s}
+#mainNav .nav-links a:hover{color:var(--gold)}
 .nav-cta{font-family:'Oswald',sans-serif;font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;background:var(--blood);color:var(--smoke);border:none;padding:.55rem 1.4rem;cursor:pointer;transition:all .3s;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);text-decoration:none;display:inline-block}
 .nav-cta:hover{background:var(--blood-light);box-shadow:0 0 20px rgba(139,0,0,.5)}
 .nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:.3rem}
@@ -433,7 +433,7 @@ footer{background:#080808;padding:2.5rem 4rem;border-top:1px solid rgba(201,168,
       <a href="#" class="social-link wa-link" title="WhatsApp" href="#" target="_blank">💬</a>
       <a href="#" class="social-link yt-link" title="YouTube" href="#">▶️</a>
     </div>
-    <nav class="footer-nav">
+    <div class="footer-nav">
       <a href="#layanan">Layanan</a>
       <a href="#portofolio">Portofolio</a>
       <a href="#proses">Proses</a>
