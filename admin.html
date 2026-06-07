@@ -161,6 +161,23 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--surface2);border-left:3px solid var(--green);padding:.8rem 1.2rem;font-family:'Oswald',sans-serif;font-size:.78rem;letter-spacing:.1em;color:var(--smoke);z-index:999;transform:translateX(120%);transition:transform .4s cubic-bezier(.175,.885,.32,1.275);min-width:220px}
 .toast.show{transform:translateX(0)}
 .toast.error{border-color:var(--red)}
+.prod-card{background:var(--surface);border:1px solid rgba(255,255,255,.05);overflow:hidden;transition:transform .3s,border-color .3s;animation:itemIn .4s ease both}
+.prod-card:hover{transform:translateY(-3px);border-color:rgba(201,168,76,.25)}
+.prod-img-wrap{position:relative;aspect-ratio:1/1;overflow:hidden;background:var(--surface3)}
+.prod-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .5s;display:block}
+.prod-card:hover .prod-img-wrap img{transform:scale(1.05)}
+.prod-badge{position:absolute;top:.4rem;left:.4rem;font-family:"Oswald",sans-serif;font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;padding:.15rem .45rem;clip-path:polygon(4px 0%,100% 0%,calc(100% - 4px) 100%,0% 100%)}
+.prod-badge.available{background:#25D366;color:#fff}
+.prod-badge.preorder{background:var(--gold);color:var(--obsidian)}
+.prod-badge.soldout{background:#444;color:var(--smoke-dim)}
+.prod-cat-badge{position:absolute;top:.4rem;right:.4rem;font-family:"Oswald",sans-serif;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;background:rgba(13,13,13,.8);color:var(--gold);border:1px solid rgba(201,168,76,.3);padding:.15rem .4rem}
+.prod-actions{position:absolute;inset:0;background:rgba(13,13,13,.75);display:flex;align-items:center;justify-content:center;gap:.4rem;opacity:0;transition:opacity .3s}
+.prod-card:hover .prod-actions{opacity:1}
+.prod-info{padding:.8rem}
+.prod-name{font-family:"Oswald",sans-serif;font-size:.85rem;letter-spacing:.05em;color:var(--smoke);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:.3rem}
+.prod-price{font-family:"Bebas Neue",sans-serif;font-size:1.2rem;color:var(--gold);letter-spacing:.05em}
+.prod-price-coret{font-family:"DM Sans",sans-serif;font-size:.72rem;color:var(--smoke-dim);text-decoration:line-through;margin-left:.4rem}
+.prod-desc{font-size:.7rem;color:var(--smoke-dim);margin-top:.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:var(--obsidian)}
 ::-webkit-scrollbar-thumb{background:var(--blood)}
@@ -202,6 +219,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
     <button class="tab-btn active" onclick="switchTab(this,'upload')">⚡ Upload Karya</button>
     <button class="tab-btn" onclick="switchTab(this,'gallery')">🖼️ Galeri</button>
     <button class="tab-btn" onclick="switchTab(this,'settings')">⚙️ Info Toko</button>
+    <button class="tab-btn" onclick="switchTab(this,'products')">🛒 Produk</button>
   </div>
 
   <!-- TAB UPLOAD -->
@@ -329,6 +347,114 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       <span class="save-ok" id="save-ok">✅ Tersimpan!</span>
     </div>
   </div>
+  <!-- TAB PRODUCTS -->
+  <div class="tab-panel" id="tab-products">
+    <div class="upload-layout">
+      <!-- Sidebar form -->
+      <div class="upload-sidebar">
+        <div class="sidebar-title">Tambah Produk</div>
+        <p class="sidebar-sub">Tambah item yang dijual — custom order, merchandise, atau ready stock.</p>
+
+        <div class="drop-zone" id="prodDropZone">
+          <input type="file" id="prodFileInput" accept="image/*" onchange="handleProdFile(this.files[0])">
+          <div class="drop-icon">📦</div>
+          <div class="drop-text">Foto produk</div>
+          <div class="drop-hint">klik atau drag & drop</div>
+        </div>
+        <div class="preview-wrap" id="prodPreviewWrap">
+          <img id="prodPreviewImg" src="" alt="">
+          <button class="preview-remove" onclick="clearProdPreview()">✕</button>
+        </div>
+
+        <label class="form-label">Nama Produk *</label>
+        <input class="form-input" type="text" id="p-nama" placeholder="cth: Custom Figure Goku">
+
+        <label class="form-label">Kategori</label>
+        <select class="form-select" id="p-kategori">
+          <option value="">Pilih kategori...</option>
+          <option value="Custom Order">🎨 Custom Order</option>
+          <option value="Ready Stock">📦 Ready Stock</option>
+          <option value="Merchandise">👕 Merchandise</option>
+          <option value="3D Print">🖨️ 3D Print</option>
+          <option value="Apparel">👔 Apparel</option>
+          <option value="Accessories">💎 Accessories</option>
+        </select>
+
+        <label class="form-label">Harga (Rp) *</label>
+        <input class="form-input" type="number" id="p-harga" placeholder="150000">
+
+        <label class="form-label">Harga Coret (opsional)</label>
+        <input class="form-input" type="number" id="p-harga-coret" placeholder="200000">
+
+        <label class="form-label">Status Stok</label>
+        <select class="form-select" id="p-stok">
+          <option value="available">✅ Tersedia</option>
+          <option value="preorder">⏳ Pre-Order</option>
+          <option value="soldout">❌ Habis</option>
+        </select>
+
+        <label class="form-label">Deskripsi</label>
+        <input class="form-input" type="text" id="p-desc" placeholder="Detail produk...">
+
+        <div class="progress-bar" id="prodProgressBar">
+          <div class="progress-fill" id="prodProgressFill"></div>
+        </div>
+        <button class="btn-red" id="btnAddProd" onclick="addProduct()" style="margin-top:.3rem">➕ Tambah Produk</button>
+        <div class="upload-status" id="prodStatus"></div>
+      </div>
+
+      <!-- Products grid -->
+      <div>
+        <div class="gallery-toolbar">
+          <div class="gallery-title-t">DAFTAR PRODUK</div>
+          <div class="toolbar-right">
+            <input class="search-input" type="text" placeholder="🔍 Cari produk..." id="prodSearch" oninput="renderProducts()">
+            <button class="filter-chip active" data-filter="all" onclick="setProdFilter(this)">All</button>
+            <button class="filter-chip" data-filter="Custom Order" onclick="setProdFilter(this)">Custom</button>
+            <button class="filter-chip" data-filter="Ready Stock" onclick="setProdFilter(this)">Stock</button>
+            <button class="filter-chip" data-filter="Merchandise" onclick="setProdFilter(this)">Merch</button>
+          </div>
+        </div>
+        <div class="gallery-grid" id="productsGrid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Product Edit Modal -->
+<div class="modal-overlay" id="prodEditModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeProdModal()">✕</button>
+    <div class="modal-title">Edit Produk</div>
+    <input type="hidden" id="pedit-id">
+    <label class="form-label">Nama Produk</label>
+    <input class="form-input" type="text" id="pedit-nama">
+    <label class="form-label">Kategori</label>
+    <select class="form-select" id="pedit-kategori">
+      <option value="Custom Order">🎨 Custom Order</option>
+      <option value="Ready Stock">📦 Ready Stock</option>
+      <option value="Merchandise">👕 Merchandise</option>
+      <option value="3D Print">🖨️ 3D Print</option>
+      <option value="Apparel">👔 Apparel</option>
+      <option value="Accessories">💎 Accessories</option>
+    </select>
+    <label class="form-label">Harga (Rp)</label>
+    <input class="form-input" type="number" id="pedit-harga">
+    <label class="form-label">Harga Coret (Rp)</label>
+    <input class="form-input" type="number" id="pedit-harga-coret">
+    <label class="form-label">Status Stok</label>
+    <select class="form-select" id="pedit-stok">
+      <option value="available">✅ Tersedia</option>
+      <option value="preorder">⏳ Pre-Order</option>
+      <option value="soldout">❌ Habis</option>
+    </select>
+    <label class="form-label">Deskripsi</label>
+    <input class="form-input" type="text" id="pedit-desc">
+    <div class="modal-btns">
+      <button class="btn-save" onclick="saveProdEdit()">💾 Simpan</button>
+      <button class="btn-cancel" onclick="closeProdModal()">Batal</button>
+    </div>
+  </div>
 </div>
 
 <!-- Edit Modal -->
@@ -420,6 +546,7 @@ function switchTab(btn, id) {
   document.getElementById('tab-' + id).classList.add('active');
   if (id === 'gallery') loadGallery();
   if (id === 'settings') { loadSettings(); checkConn(); }
+  if (id === 'products') loadProducts();
 }
 
 // ── BATCH FILES
@@ -701,6 +828,200 @@ async function saveSettings() {
     setTimeout(() => el.classList.remove('show'), 3000);
   } catch(e) { showToast('❌ Gagal: ' + e.message, true); }
 }
+
+// ── PRODUCTS
+let allProducts = [];
+let prodFilter = 'all';
+let prodSelectedFile = null;
+
+function handleProdFile(file) {
+  if (!file) return;
+  prodSelectedFile = file;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('prodPreviewImg').src = e.target.result;
+    document.getElementById('prodPreviewWrap').style.display = 'block';
+    document.getElementById('prodDropZone').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearProdPreview() {
+  prodSelectedFile = null;
+  document.getElementById('prodPreviewWrap').style.display = 'none';
+  document.getElementById('prodDropZone').style.display = 'block';
+  document.getElementById('prodFileInput').value = '';
+}
+
+// Drag drop for product
+const pdz = document.getElementById('prodDropZone');
+if (pdz) {
+  pdz.addEventListener('dragover', e => { e.preventDefault(); pdz.classList.add('drag-over'); });
+  pdz.addEventListener('dragleave', () => pdz.classList.remove('drag-over'));
+  pdz.addEventListener('drop', e => { e.preventDefault(); pdz.classList.remove('drag-over'); if(e.dataTransfer.files[0]) handleProdFile(e.dataTransfer.files[0]); });
+}
+
+function formatRupiah(n) {
+  return 'Rp ' + parseInt(n).toLocaleString('id-ID');
+}
+
+async function addProduct() {
+  const nama = document.getElementById('p-nama').value.trim();
+  const harga = document.getElementById('p-harga').value;
+  const harga_coret = document.getElementById('p-harga-coret').value;
+  const kategori = document.getElementById('p-kategori').value;
+  const stok = document.getElementById('p-stok').value;
+  const desc = document.getElementById('p-desc').value.trim();
+  const statusEl = document.getElementById('prodStatus');
+
+  if (!nama) { statusEl.textContent = '⚠ Nama produk wajib diisi'; statusEl.className = 'upload-status error'; return; }
+  if (!harga) { statusEl.textContent = '⚠ Harga wajib diisi'; statusEl.className = 'upload-status error'; return; }
+
+  document.getElementById('btnAddProd').disabled = true;
+  statusEl.textContent = '⏳ Menyimpan...'; statusEl.className = 'upload-status loading';
+
+  const bar = document.getElementById('prodProgressBar');
+  const fill = document.getElementById('prodProgressFill');
+  bar.style.display = 'block'; fill.style.width = '30%';
+
+  let img_url = '';
+  try {
+    if (prodSelectedFile) {
+      fill.style.width = '50%';
+      const ext = prodSelectedFile.name.split('.').pop();
+      const fileName = 'prod_' + Date.now() + '_' + Math.random().toString(36).slice(2) + '.' + ext;
+      const { error: upErr } = await sb.storage.from(SB_BUCKET).upload(fileName, prodSelectedFile, { cacheControl: '3600', upsert: true });
+      if (upErr) throw new Error('Storage: ' + upErr.message);
+      const { data: urlData } = sb.storage.from(SB_BUCKET).getPublicUrl(fileName);
+      img_url = urlData.publicUrl;
+    }
+
+    fill.style.width = '80%';
+    const payload = { nama, harga: parseInt(harga), kategori, stok, deskripsi: desc, img_url };
+    if (harga_coret) payload.harga_coret = parseInt(harga_coret);
+
+    const { error: dbErr } = await sb.from('products').insert([payload]);
+    if (dbErr) throw new Error('DB: ' + dbErr.message);
+
+    fill.style.width = '100%';
+    statusEl.textContent = '✅ Produk ditambahkan!'; statusEl.className = 'upload-status success';
+    showToast('✅ ' + nama + ' berhasil ditambahkan!');
+
+    // Reset form
+    document.getElementById('p-nama').value = '';
+    document.getElementById('p-harga').value = '';
+    document.getElementById('p-harga-coret').value = '';
+    document.getElementById('p-kategori').value = '';
+    document.getElementById('p-stok').value = 'available';
+    document.getElementById('p-desc').value = '';
+    clearProdPreview();
+    loadProducts();
+    setTimeout(() => { statusEl.textContent = ''; bar.style.display = 'none'; fill.style.width = '0%'; }, 3000);
+  } catch(e) {
+    statusEl.textContent = '❌ ' + e.message; statusEl.className = 'upload-status error';
+    showToast('❌ ' + e.message, true);
+  }
+  document.getElementById('btnAddProd').disabled = false;
+}
+
+async function loadProducts() {
+  const { data, error } = await sb.from('products').select('*').order('urutan').order('created_at', { ascending: false });
+  if (error) { showToast('❌ Gagal load produk', true); return; }
+  allProducts = data || [];
+  renderProducts();
+}
+
+function setProdFilter(btn) {
+  document.querySelectorAll('#tab-products .filter-chip').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  prodFilter = btn.dataset.filter;
+  renderProducts();
+}
+
+function renderProducts() {
+  const search = document.getElementById('prodSearch')?.value.toLowerCase() || '';
+  const grid = document.getElementById('productsGrid');
+  let items = allProducts.filter(p => {
+    const mf = prodFilter === 'all' || p.kategori === prodFilter;
+    const ms = !search || p.nama.toLowerCase().includes(search);
+    return mf && ms;
+  });
+  if (items.length === 0) {
+    grid.innerHTML = '<div class="empty-state"><div class="empty-icon">📦</div><div class="empty-text">Belum ada produk</div></div>';
+    return;
+  }
+  grid.innerHTML = items.map(p => `
+    <div class="prod-card">
+      <div class="prod-img-wrap">
+        ${p.img_url ? `<img src="${p.img_url}" alt="${p.nama}" loading="lazy">` : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:3rem;background:var(--surface3)">📦</div>'}
+        <div class="prod-badge ${p.stok}">${p.stok === 'available' ? '✅ Tersedia' : p.stok === 'preorder' ? '⏳ Pre-Order' : '❌ Habis'}</div>
+        ${p.kategori ? `<div class="prod-cat-badge">${p.kategori}</div>` : ''}
+        <div class="prod-actions">
+          <button class="action-btn" onclick="openProdEdit('${p.id}')">✏️</button>
+          <button class="action-btn delete" onclick="deleteProd('${p.id}','${p.img_url || ''}')">🗑️</button>
+        </div>
+      </div>
+      <div class="prod-info">
+        <div class="prod-name">${p.nama}</div>
+        <div>
+          <span class="prod-price">${formatRupiah(p.harga)}</span>
+          ${p.harga_coret ? `<span class="prod-price-coret">${formatRupiah(p.harga_coret)}</span>` : ''}
+        </div>
+        ${p.deskripsi ? `<div class="prod-desc">${p.deskripsi}</div>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+async function deleteProd(id, imgUrl) {
+  if (!confirm('Hapus produk ini?')) return;
+  try {
+    if (imgUrl) {
+      const path = imgUrl.split('/').pop();
+      await sb.storage.from(SB_BUCKET).remove([path]);
+    }
+    await sb.from('products').delete().eq('id', id);
+    allProducts = allProducts.filter(p => p.id !== id);
+    renderProducts();
+    showToast('🗑️ Produk dihapus');
+  } catch(e) { showToast('❌ Gagal hapus', true); }
+}
+
+function openProdEdit(id) {
+  const p = allProducts.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('pedit-id').value = id;
+  document.getElementById('pedit-nama').value = p.nama;
+  document.getElementById('pedit-kategori').value = p.kategori || '';
+  document.getElementById('pedit-harga').value = p.harga;
+  document.getElementById('pedit-harga-coret').value = p.harga_coret || '';
+  document.getElementById('pedit-stok').value = p.stok || 'available';
+  document.getElementById('pedit-desc').value = p.deskripsi || '';
+  document.getElementById('prodEditModal').classList.add('open');
+}
+
+function closeProdModal() { document.getElementById('prodEditModal').classList.remove('open'); }
+
+async function saveProdEdit() {
+  const id = document.getElementById('pedit-id').value;
+  const harga_coret = document.getElementById('pedit-harga-coret').value;
+  const payload = {
+    nama: document.getElementById('pedit-nama').value.trim(),
+    kategori: document.getElementById('pedit-kategori').value,
+    harga: parseInt(document.getElementById('pedit-harga').value),
+    stok: document.getElementById('pedit-stok').value,
+    deskripsi: document.getElementById('pedit-desc').value.trim(),
+  };
+  if (harga_coret) payload.harga_coret = parseInt(harga_coret);
+  try {
+    await sb.from('products').update(payload).eq('id', id);
+    const idx = allProducts.findIndex(p => p.id === id);
+    if (idx > -1) allProducts[idx] = { ...allProducts[idx], ...payload };
+    renderProducts(); closeProdModal();
+    showToast('✅ Produk diupdate');
+  } catch(e) { showToast('❌ Gagal update', true); }
+}
+
+document.getElementById('prodEditModal')?.addEventListener('click', e => { if(e.target === document.getElementById('prodEditModal')) closeProdModal(); });
 
 // ── TOAST
 function showToast(msg, isError = false) {

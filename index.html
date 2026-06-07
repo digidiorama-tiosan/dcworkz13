@@ -343,6 +343,36 @@ footer{background:#080808;padding:2.5rem 4rem;border-top:1px solid rgba(201,168,
 .footer-copy{font-size:.72rem;color:rgba(160,160,160,.5);letter-spacing:.05em}
 .footer-made{font-size:.72rem;color:rgba(160,160,160,.4)}
 
+
+/* SHOP SECTION */
+#shop{background:var(--deep);position:relative}
+#shop::before{content:'';position:absolute;top:0;left:4rem;right:4rem;height:1px;background:linear-gradient(to right,transparent,var(--blood),var(--gold),var(--blood),transparent)}
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1px;background:rgba(201,168,76,.1);margin-top:2.5rem}
+.shop-card{background:var(--obsidian);overflow:hidden;position:relative;transition:transform .3s,background .3s;cursor:pointer}
+.shop-card:hover{transform:translateY(-4px);background:#0a0a0a}
+.shop-card-img{position:relative;aspect-ratio:1/1;overflow:hidden;background:var(--surface2)}
+.shop-card-img img{width:100%;height:100%;object-fit:cover;transition:transform .6s;display:block;filter:brightness(.9)}
+.shop-card:hover .shop-card-img img{transform:scale(1.06);filter:brightness(1)}
+.shop-card-img-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:3.5rem;background:var(--surface2)}
+.shop-stok-badge{position:absolute;top:.6rem;left:.6rem;font-family:'Oswald',sans-serif;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;padding:.2rem .55rem;clip-path:polygon(5px 0%,100% 0%,calc(100% - 5px) 100%,0% 100%)}
+.shop-stok-badge.available{background:#25D366;color:#fff}
+.shop-stok-badge.preorder{background:var(--gold);color:var(--obsidian)}
+.shop-stok-badge.soldout{background:#444;color:var(--smoke-dim)}
+.shop-cat-badge{position:absolute;top:.6rem;right:.6rem;font-family:'Oswald',sans-serif;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;background:rgba(13,13,13,.85);color:var(--gold);border:1px solid rgba(201,168,76,.3);padding:.15rem .4rem}
+.shop-card-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(13,13,13,.9) 0%,transparent 60%);opacity:0;transition:opacity .3s;display:flex;align-items:flex-end;padding:1rem}
+.shop-card:hover .shop-card-overlay{opacity:1}
+.shop-overlay-btn{font-family:'Oswald',sans-serif;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;background:#25D366;color:#fff;border:none;padding:.5rem 1.2rem;cursor:pointer;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);width:100%;transition:background .2s}
+.shop-overlay-btn:hover{background:#20BD5B}
+.shop-card-body{padding:1rem}
+.shop-card-name{font-family:'Oswald',sans-serif;font-size:.95rem;letter-spacing:.06em;text-transform:uppercase;color:var(--smoke);margin-bottom:.4rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shop-card-desc{font-size:.78rem;color:var(--smoke-dim);line-height:1.5;margin-bottom:.6rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.shop-price-wrap{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.shop-price{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--gold);letter-spacing:.05em}
+.shop-price-coret{font-size:.78rem;color:var(--smoke-dim);text-decoration:line-through}
+.shop-loading{grid-column:1/-1;text-align:center;padding:4rem;color:var(--smoke-dim);font-family:'Oswald',sans-serif;font-size:.85rem;letter-spacing:.15em}
+.shop-empty{grid-column:1/-1;text-align:center;padding:4rem;color:var(--smoke-dim)}
+.shop-filter-wrap{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem}
+.shop-header{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem}
 /* REVEAL */
 .reveal{opacity:0;transform:translateY(40px);transition:opacity .7s ease,transform .7s ease}
 .reveal.visible{opacity:1;transform:translateY(0)}
@@ -395,6 +425,7 @@ footer{background:#080808;padding:2.5rem 4rem;border-top:1px solid rgba(201,168,
     <li><a href="#portofolio">Portofolio</a></li>
     <li><a href="#proses">Proses</a></li>
     <li><a href="#testimoni">Review</a></li>
+    <li><a href="#shop">Shop</a></li>
   </ul>
   <a href="#" class="nav-cta wa-link" target="_blank">Order Sekarang</a>
   <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()">
@@ -409,6 +440,7 @@ footer{background:#080808;padding:2.5rem 4rem;border-top:1px solid rgba(201,168,
   <a href="#portofolio" onclick="toggleMenu()">Portofolio</a>
   <a href="#proses" onclick="toggleMenu()">Proses</a>
   <a href="#testimoni" onclick="toggleMenu()">Testimoni</a>
+  <a href="#shop" onclick="toggleMenu()">Shop</a>
   <a href="#" class="wa-link" target="_blank" style="color:var(--gold)">Order Sekarang</a>
 </div>
 
@@ -527,6 +559,26 @@ footer{background:#080808;padding:2.5rem 4rem;border-top:1px solid rgba(201,168,
   </div>
 </section>
 
+<!-- SHOP -->
+<section id="shop">
+  <div class="shop-header reveal">
+    <div>
+      <div class="section-label">Items &amp; Merchandise</div>
+      <h2 class="section-title">OUR <span style="color:var(--blood)">SHOP</span></h2>
+    </div>
+    <div class="shop-filter-wrap" id="shopFilters">
+      <button class="filter-btn active" data-filter="all" onclick="filterShop(this)">All</button>
+      <button class="filter-btn" data-filter="Custom Order" onclick="filterShop(this)">Custom Order</button>
+      <button class="filter-btn" data-filter="Ready Stock" onclick="filterShop(this)">Ready Stock</button>
+      <button class="filter-btn" data-filter="Merchandise" onclick="filterShop(this)">Merchandise</button>
+      <button class="filter-btn" data-filter="Apparel" onclick="filterShop(this)">Apparel</button>
+    </div>
+  </div>
+  <div class="shop-grid" id="shopGrid">
+    <div class="shop-loading">⏳ Memuat produk...</div>
+  </div>
+</section>
+
 <!-- ORDER -->
 <section id="order">
   <div class="order-content">
@@ -560,6 +612,7 @@ footer{background:#080808;padding:2.5rem 4rem;border-top:1px solid rgba(201,168,
       <a href="#portofolio">Portofolio</a>
       <a href="#proses">Proses</a>
       <a href="#testimoni">Testimoni</a>
+      <a href="#shop">Shop</a>
       <a href="#order">Order</a>
     </nav>
   </div>
@@ -663,6 +716,72 @@ function filterPortfolio(btn) {
 
 // Load on start
 loadPortfolio();
+loadShop();
+
+// ── SHOP
+let allShopItems = [];
+let shopFilter = 'all';
+
+function formatRp(n) {
+  return 'Rp ' + parseInt(n).toLocaleString('id-ID');
+}
+
+async function loadShop() {
+  try {
+    const { data, error } = await SB_CLIENT.from('products').select('*').order('urutan').order('created_at', { ascending: false });
+    if (error) throw error;
+    allShopItems = data || [];
+    renderShop();
+  } catch(e) {
+    document.getElementById('shopGrid').innerHTML = '<div class="shop-empty"><div style="font-size:2rem;opacity:.3">📦</div><div style="font-family:'Oswald',sans-serif;font-size:.8rem;letter-spacing:.15em;opacity:.4;margin-top:.5rem">BELUM ADA PRODUK</div></div>';
+  }
+}
+
+function filterShop(btn) {
+  document.querySelectorAll('#shopFilters .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  shopFilter = btn.dataset.filter;
+  renderShop();
+}
+
+function renderShop() {
+  const grid = document.getElementById('shopGrid');
+  const items = shopFilter === 'all' ? allShopItems : allShopItems.filter(p => p.kategori === shopFilter);
+  if (items.length === 0) {
+    grid.innerHTML = '<div class="shop-empty"><div style="font-size:2rem;opacity:.3">📦</div><div style="font-family:'Oswald',sans-serif;font-size:.8rem;letter-spacing:.15em;opacity:.4;margin-top:.5rem">BELUM ADA PRODUK</div></div>';
+    return;
+  }
+  grid.innerHTML = items.map(p => {
+    const waMsg = encodeURIComponent('Halo, saya tertarik dengan produk: ' + p.nama + ' (Rp ' + parseInt(p.harga).toLocaleString('id-ID') + '). Apakah masih tersedia?');
+    const waBase = document.querySelector('.wa-link')?.href?.split('?')[0] || 'https://wa.me/';
+    const waUrl = waBase + '?text=' + waMsg;
+    return `
+    <div class="shop-card">
+      <div class="shop-card-img">
+        ${p.img_url
+          ? `<img src="${p.img_url}" alt="${p.nama}" loading="lazy">`
+          : '<div class="shop-card-img-placeholder">📦</div>'
+        }
+        <div class="shop-stok-badge ${p.stok}">${p.stok === 'available' ? '✅ Tersedia' : p.stok === 'preorder' ? '⏳ Pre-Order' : '❌ Habis'}</div>
+        ${p.kategori ? `<div class="shop-cat-badge">${p.kategori}</div>` : ''}
+        <div class="shop-card-overlay">
+          ${p.stok !== 'soldout'
+            ? `<a href="${waUrl}" target="_blank" class="shop-overlay-btn">💬 Order via WhatsApp</a>`
+            : '<button class="shop-overlay-btn" style="background:#555;cursor:not-allowed">❌ Stok Habis</button>'
+          }
+        </div>
+      </div>
+      <div class="shop-card-body">
+        <div class="shop-card-name">${p.nama}</div>
+        ${p.deskripsi ? `<div class="shop-card-desc">${p.deskripsi}</div>` : ''}
+        <div class="shop-price-wrap">
+          <span class="shop-price">${formatRp(p.harga)}</span>
+          ${p.harga_coret ? `<span class="shop-price-coret">${formatRp(p.harga_coret)}</span>` : ''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
 loadSettings();
 
 // ── SETTINGS dari Supabase
